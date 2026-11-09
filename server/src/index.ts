@@ -94,4 +94,4 @@ process.on('unhandledRejection', (e) => console.error('[unhandledRejection]', e)
 process.on('uncaughtException', (e) => { console.error('[uncaughtException]', e); process.exit(1); });
 
 startProviderChecks();
-server.listen(cfg.port, () => console.log(`Si-kam-nu server on ${cfg.publicUrl} (STT: deepgram=${!!cfg.deepgramKey} assemblyai=${!!cfg.assemblyKey}, summary=${!!cfg.anthropicKey}, store=${cfg.supabaseUrl ? 'supabase' : cfg.dataDir})`));
+server.listen(cfg.port, cfg.host, () => console.log(`Si-kam-nu server on ${cfg.publicUrl} (STT: deepgram=${!!cfg.deepgramKey} assemblyai=${!!cfg.assemblyKey}, summary=${!!cfg.anthropicKey}, store=${cfg.supabaseUrl ? 'supabase' : cfg.dataDir})`));

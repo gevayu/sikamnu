@@ -3,6 +3,8 @@ const port = Number(env.PORT ?? 8787);
 
 export const cfg = {
   port,
+  // ponytail: /calls בלי טוקן, לכן מאזינים רק למחשב הזה. HOST=0.0.0.0 פותח לרשת, רק אחרי שיש אימות על /calls.
+  host: env.HOST || '127.0.0.1',
   publicUrl: env.PUBLIC_URL ?? `http://localhost:${port}`,
   authToken: env.AUTH_TOKEN ?? 'dev-token',
   dataDir: env.DATA_DIR ?? 'data',
