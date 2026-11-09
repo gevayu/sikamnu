@@ -41,6 +41,8 @@ cat > "$plist" <<EOF
 EOF
 
 launchctl bootout "gui/$(id -u)/$label" 2>/dev/null || true
+# bootout returns before the old job is gone, and bootstrap fails with error 5 if it is still there.
+for _ in 1 2 3 4 5 6 7 8 9 10; do launchctl print "gui/$(id -u)/$label" >/dev/null 2>&1 || break; sleep 0.5; done
 launchctl bootstrap "gui/$(id -u)" "$plist"
 echo "Installed $plist"
 echo "Server starts now and at every login. Log: $root/server.log"
