@@ -13,6 +13,9 @@ export const cfg = {
   aaiSpeechModel: env.AAI_SPEECH_MODEL || undefined,
   liveProvider: env.STT_LIVE_PROVIDER || undefined,
   batchProvider: env.STT_BATCH_PROVIDER || undefined,
+  /** whisper.cpp מקומי, batch בלבד. ריק = כבוי. */
+  whisperModel: env.WHISPER_MODEL || '',
+  whisperCli: env.WHISPER_CLI || 'whisper-cli',
   anthropicKey: env.ANTHROPIC_API_KEY ?? '',
   summaryModel: env.SUMMARY_MODEL ?? 'claude-sonnet-5',
   supabaseUrl: env.SUPABASE_URL || undefined,

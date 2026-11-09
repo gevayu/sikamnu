@@ -21,6 +21,12 @@ test('ספק אחד נדחה ויתרה נמוכה בשני: אזהרות בלב
   assert.ok(out.some((i) => i.text.includes('$1.20')));
 });
 
+test('רק whisper מקומי: לא חוסם, ואזהרה אחת שאין תמליל חי', () => {
+  const out = issues({ ...st('missing', 'missing', 'ok'), whisper: { state: 'ok' } });
+  assert.deepEqual(out.map((i) => i.level), ['warn']);
+  assert.match(out[0].text, /תמליל חי/);
+});
+
 test('בלי Anthropic: אזהרה שאין סיכום', () => {
   const out = issues(st('ok', 'ok', 'missing'));
   assert.equal(out.length, 1);

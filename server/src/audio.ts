@@ -13,6 +13,14 @@ export function wavHeader(dataBytes: number, sampleRate: number, channels: numbe
 export const wrapWav = (pcm: Buffer, sampleRate: number, channels: number): Buffer =>
   Buffer.concat([wavHeader(pcm.length, sampleRate, channels), pcm]);
 
+/** ה-PCM מתוך WAV. לא מניח header של 44 בייט: ffmpeg ועורכי אודיו מוסיפים chunks כמו LIST לפני data. */
+export function wavPcm(wav: Buffer): Buffer {
+  for (let o = 12; o + 8 <= wav.length; o += 8 + wav.readUInt32LE(o + 4) + (wav.readUInt32LE(o + 4) & 1)) {
+    if (wav.toString('ascii', o, o + 4) === 'data') return wav.subarray(o + 8, Math.min(wav.length, o + 8 + wav.readUInt32LE(o + 4)));
+  }
+  return wav.subarray(44);
+}
+
 /** PCM16 interleaved → מערך של ערוצים מונו */
 export function splitChannels(pcm: Buffer, channels: number): Buffer[] {
   const frames = Math.floor(pcm.length / (2 * channels));

@@ -7,7 +7,7 @@
     "start": "node --env-file-if-exists=../.env dist/index.js",
     "check": "tsc -p . --noEmit",
     "build": "tsc -p .",
-    "test": "node --test src/*.test.ts"
+    "test": "node --test src/*.test.ts src/stt/*.test.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.126.0",

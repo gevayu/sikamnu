@@ -1,10 +1,11 @@
 import { cfg } from './config.ts';
+import { whisperReady } from './stt/whisper.ts';
 
 /**
  * בדיקת ספקים: השרת שולח לכל ספק קריאה זולה בעלייה ופעם ביום, ושומר את התוצאה.
  * /health מחזיר אותה, והתוסף מתריע כבר כשנכנסים לשיחה, לפני שלוחצים "הקלט".
  */
-export type ProviderId = 'deepgram' | 'assemblyai' | 'anthropic';
+export type ProviderId = 'deepgram' | 'assemblyai' | 'anthropic' | 'whisper';
 export interface ProviderStatus {
   state: 'missing' | 'ok' | 'low' | 'error';
   detail?: string;           // HTTP status, יתרה, או הודעת שגיאה. לעולם לא המפתח עצמו
@@ -16,7 +17,7 @@ const LOW_CREDIT_USD = 2;
 const DAY = 24 * 60 * 60 * 1000;
 
 export const status: Record<ProviderId, ProviderStatus> = {
-  deepgram: { state: 'missing' }, assemblyai: { state: 'missing' }, anthropic: { state: 'missing' },
+  deepgram: { state: 'missing' }, assemblyai: { state: 'missing' }, anthropic: { state: 'missing' }, whisper: { state: 'missing' },
 };
 
 async function call(url: string, init: RequestInit): Promise<Response> {
@@ -58,9 +59,14 @@ async function checkAnthropic(): Promise<ProviderStatus> {
   return r.ok ? { state: 'ok' } : fail(r);
 }
 
+async function checkWhisper(): Promise<ProviderStatus> {
+  if (!cfg.whisperModel) return { state: 'missing' };
+  return whisperReady() ? { state: 'ok', detail: 'local' } : { state: 'error', detail: `WHISPER_MODEL not found: ${cfg.whisperModel}` };
+}
+
 export async function checkProviders(): Promise<void> {
   const checks: [ProviderId, () => Promise<ProviderStatus>][] = [
-    ['deepgram', checkDeepgram], ['assemblyai', checkAssembly], ['anthropic', checkAnthropic],
+    ['deepgram', checkDeepgram], ['assemblyai', checkAssembly], ['anthropic', checkAnthropic], ['whisper', checkWhisper],
   ];
   await Promise.all(checks.map(async ([id, fn]) => {
     const s = await fn().catch((e): ProviderStatus => ({ state: 'error', detail: e instanceof Error ? e.message : String(e) }));
@@ -77,14 +83,18 @@ export function startProviderChecks() {
 /** ספק תמלול שאפשר לשלוח אליו עבודה. low עדיין עובד, רק מתריעים. */
 export const usable = (id: ProviderId) => status[id].state === 'ok' || status[id].state === 'low';
 
-const NAMES: Record<ProviderId, string> = { deepgram: 'Deepgram', assemblyai: 'AssemblyAI', anthropic: 'Anthropic' };
+const NAMES: Record<ProviderId, string> = { deepgram: 'Deepgram', assemblyai: 'AssemblyAI', anthropic: 'Anthropic', whisper: 'whisper' };
 
 /** תקלות בעברית לתוסף. block = ההקלטה לא תתומלל. warn = תעבוד, אבל משהו חסר או עומד להיגמר. */
-export function issues(s: Record<ProviderId, ProviderStatus> = status): Issue[] {
+export function issues(s: Record<Exclude<ProviderId, 'whisper'>, ProviderStatus> & { whisper?: ProviderStatus } = status): Issue[] {
   const out: Issue[] = [];
-  const stt: ProviderId[] = ['deepgram', 'assemblyai'];
-  const ok = (id: ProviderId) => s[id].state === 'ok' || s[id].state === 'low';
-  if (!stt.some(ok)) {
+  const stt = ['deepgram', 'assemblyai'] as const;
+  const ok = (id: (typeof stt)[number]) => s[id].state === 'ok' || s[id].state === 'low';
+  const local = s.whisper?.state === 'ok';
+  if (s.whisper?.state === 'error') out.push({ level: 'warn', text: `whisper מוגדר, אבל קובץ המודל לא נמצא. בדוק את WHISPER_MODEL בקובץ .env.` });
+  if (!stt.some(ok) && local) {
+    out.push({ level: 'warn', text: 'תמלול בסיום רץ מקומית ב-whisper. תמליל חי לא יעבוד בלי מפתח Deepgram או AssemblyAI.' });
+  } else if (!stt.some(ok)) {
     out.push({ level: 'block', text: 'אין ספק תמלול תקין. בדוק את המפתחות של Deepgram ו-AssemblyAI בקובץ .env.' });
   } else {
     for (const id of stt) {
