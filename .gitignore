@@ -3,3 +3,21 @@ dist/
 data/
 .env
 *.log
+.env.*
+!.env.example
+.DS_Store
+__pycache__/
+# recordings are personal data, never in git
+*.pcm
+*.wav
+*.ogg
+*.opus
+*.mp3
+*.m4a
+*.mp4
+*.mov
+*.webm
+*.zip
+*.tar.gz
+*.sql.gz
+*.wpress
