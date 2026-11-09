@@ -87,7 +87,7 @@ function hebrewError(e: unknown): string {
   if (/WS_FAILED/.test(m)) return `השרת רץ והטוקן תקין, אבל חיבור ההקלטה לשרת נכשל. ${m.replace(/^.*WS_FAILED\s*/, '')}`;
   if (/SERVER_DOWN|אין חיבור לשרת/.test(m)) {
     const why = m.match(/\((.+)\)$/)?.[1];
-    return `אין חיבור לשרת של Si-kam-nu. הוא עולה לבד עם Windows. אם הוא לא רץ, הפעל את start-server.cmd בתיקיית הפרויקט ולחץ שוב על האייקון.${why ? ` (${why})` : ''}`;
+    return `אין חיבור לשרת של Si-kam-nu. הוא עולה לבד בכניסה למחשב. אם הוא לא רץ, הפעל את start-server בתיקיית הפרויקט (.cmd ב-Windows, .sh במק) ולחץ שוב על האייקון.${why ? ` (${why})` : ''}`;
   }
   if (/not been invoked|activeTab/i.test(m)) return 'לחץ על אייקון Si-kam-nu בטאב של השיחה עצמה כדי להתחיל.';
   if (/Chrome pages cannot be captured/i.test(m)) return 'אפשר להקליט רק טאב של Meet או Zoom, לא עמוד של כרום.';
