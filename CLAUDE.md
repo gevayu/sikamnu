@@ -39,6 +39,8 @@ npm run dev               # שרת על :8787
 
 על המחשב של יובל השרת עולה מוסתר בכל כניסה ל-Windows: עותק של `start-server-hidden.vbs` נמצא ב-`%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\Si-kam-nu server.vbs`. הוא מריץ את `server-loop.cmd`, שמעלה את השרת מחדש 5 שניות אחרי כל קריסה. פלט ב-`server.log`. שינוי ב-vbs בריפו לא משפיע עד שמעתיקים אותו שוב ל-Startup.
 
+על מק: `./install-mac-agent.sh` פעם אחת. הוא כותב LaunchAgent ב-`~/Library/LaunchAgents/com.sikamnu.server.plist` עם הנתיב של התיקייה, ו-launchd מעלה את השרת מוסתר בכל כניסה ו-5 שניות אחרי כל קריסה (`KeepAlive`). פלט ב-`server.log`. אחרי הזזת התיקייה או התקנה מחדש של node מריצים אותו שוב. המקבילים: `start-server.sh` (חזית), `restart-server.sh` (`launchctl kickstart -k`), `stop-server.sh` (מוריד את ה-agent עד הכניסה הבאה). הקלטה פעילה = `sikamnu-*.pcm` שגדל ב-`$TMPDIR`. אם התיקייה תחת `~/Desktop` או `~/Documents`, ייתכן ש-macOS יבקש אישור גישה בפעם הראשונה.
+
 - **אין `--watch` בכוונה.** שינוי בקוד או ב-.env לא מפיל הקלטה באמצע. כדי לטעון שינויים: `restart-server.cmd`, רק כשאין הקלטה (בודקים שאין `sikamnu-*.pcm` שגדל ב-`%TEMP%`).
 - **עצירה מלאה:** `stop-server.cmd`, עוצר גם את הלולאה.
 - **בדיקת ספקים:** `server/src/health.ts` בודק את Deepgram (כולל יתרה), AssemblyAI ו-Anthropic בעלייה ופעם ביום. `/health?token=` מחזיר `providers`, `issues` ו-`tokenOk`. התוסף מריץ את הבדיקה בכל כניסה לשיחה ובכל heartbeat, ומציג אייקון אזהרה והתראה לפני ההקלטה.
