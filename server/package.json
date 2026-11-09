@@ -1,0 +1,22 @@
+{
+  "name": "server",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --env-file-if-exists=../.env --watch src/index.ts",
+    "start": "node --env-file-if-exists=../.env dist/index.js",
+    "check": "tsc -p . --noEmit",
+    "build": "tsc -p .",
+    "test": "node --test src/*.test.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.126.0",
+    "@supabase/supabase-js": "^2.116.0",
+    "ws": "^8.21.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.3",
+    "@types/ws": "^8.18.1",
+    "typescript": "^7.0.2"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "sikamnu",
+  "private": true,
+  "workspaces": ["extension", "server"],
+  "scripts": {
+    "dev": "npm -w server run dev",
+    "build": "npm -w extension run build && npm -w server run build",
+    "check": "npm -w server run check && npm -w extension run check"
+  }
+}

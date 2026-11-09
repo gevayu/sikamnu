@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>Si-kam-nu</title>
+<style>
+  body{font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;margin:0;padding:14px;color:#1a1a1a;font-size:14px;line-height:1.5}
+  h1{font-size:15px;margin:0 0 10px;display:flex;justify-content:space-between;align-items:center}
+  h1 a{font-weight:400;font-size:12px;color:#06c}
+  fieldset{border:1px solid #e3e0d8;border-radius:8px;padding:8px 12px;margin:0 0 10px}
+  legend{font-size:12px;color:#666;padding:0 4px}
+  label.opt{display:block;padding:4px 0;cursor:pointer}
+  label.opt small{display:block;color:#777;margin-inline-start:22px}
+  .row{display:flex;gap:8px;margin:10px 0}
+  button{flex:1;padding:8px;border:1px solid #ccc;border-radius:6px;background:#fff;cursor:pointer;font:inherit}
+  button.primary{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+  button.danger{background:#d33;color:#fff;border-color:#d33}
+  button:disabled{opacity:.4;cursor:default}
+  #status{padding:8px 10px;border-radius:6px;background:#f4f2ec;margin-bottom:10px}
+  #status.recording{background:#fde8e8}
+  #status.error{background:#fff0c2}
+  #timer{font-variant-numeric:tabular-nums;font-weight:600}
+  #transcript{max-height:55vh;overflow:auto}
+  .seg{padding:4px 0;border-bottom:1px solid #f0ede6}
+  .seg.interim{color:#999}
+  .who{font-weight:600;font-size:12px;color:#a55;margin-inline-end:6px}
+  .seg.me .who{color:#0b5}
+  .txt{unicode-bidi:plaintext}
+  .muted{color:#888;font-size:12px}
+  #consent{font-size:12px;color:#666;border-top:1px solid #eee;padding-top:8px;margin-top:8px}
+</style>
+</head>
+<body>
+<h1><span>Si-kam-nu <small id="ver" style="font-weight:400;color:#999;font-size:11px"></small></span> <a href="#" id="options">הגדרות</a></h1>
+<div id="status">אין שיחה פעילה</div>
+
+<fieldset id="modeBox">
+  <legend>מצב תמלול</legend>
+  <label class="opt"><input type="radio" name="mode" value="batch"> תמלול בסיום השיחה
+    <small>רק מקליט. התמליל והסיכום מוכנים דקה עד שלוש אחרי הסיום. זול יותר ומדויק יותר.</small></label>
+  <label class="opt"><input type="radio" name="mode" value="live"> תמליל חי
+    <small>הטקסט רץ כאן תוך כדי השיחה. עולה יותר.</small></label>
+</fieldset>
+<fieldset id="langBox">
+  <legend>שפת השיחה</legend>
+  <label class="opt"><input type="radio" name="lang" value="multi"> עברית עם אנגלית</label>
+  <label class="opt"><input type="radio" name="lang" value="he"> עברית בלבד</label>
+</fieldset>
+
+<div class="row">
+  <button id="record" class="danger" disabled>הקלט</button>
+  <button id="stop" disabled>עצור</button>
+</div>
+<div class="row"><button id="mark" disabled>סמן רגע (Alt+Shift+M)</button></div>
+
+<div id="transcript"></div>
+<div id="consent">האודיו של השיחה והמיקרופון שלך נשלחים לשרת של Si-kam-nu לתמלול. ההקלטה נשמרת 90 יום ואפשר למחוק אותה. הודע למשתתפים שהשיחה מתומללת.</div>
+
+<script type="module" src="dist/sidepanel.js"></script>
+</body>
+</html>

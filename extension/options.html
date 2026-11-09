@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>Si-kam-nu · הגדרות</title>
+<style>
+  body{font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#1a1a1a;line-height:1.5}
+  label{display:block;margin:14px 0 4px;font-weight:600}
+  small{display:block;color:#777;font-weight:400}
+  input,select,textarea{width:100%;padding:8px;border:1px solid #ccc;border-radius:6px;font:inherit;box-sizing:border-box}
+  textarea{min-height:120px}
+  button{margin-top:18px;padding:10px 18px;border:0;border-radius:6px;background:#1a1a1a;color:#fff;font:inherit;cursor:pointer}
+  #saved{color:#0b5;margin-inline-start:10px}
+  .box{border:1px solid #e3e0d8;border-radius:8px;padding:12px 16px;margin-top:24px;font-size:13px;color:#555}
+</style>
+</head>
+<body>
+<h1>הגדרות</h1>
+
+<label>כתובת השרת<input id="serverUrl" placeholder="http://localhost:8787"></label>
+<label>טוקן גישה לשרת
+  <small>זו לא מפתח API. זו סיסמה בין התוסף לשרת שלך, וצריכה להיות זהה ל-AUTH_TOKEN בקובץ .env. ברירת המחדל: dev-token. מפתחות של Deepgram, AssemblyAI ו-Anthropic נכנסים רק ל-.env בשרת, לא לכאן.</small>
+  <input id="token" placeholder="dev-token" autocomplete="off"></label>
+
+<label style="display:flex;gap:8px;align-items:center;font-weight:400"><input type="checkbox" id="autoRecord" style="width:auto"> להתחיל להקליט מיד בלחיצה על האייקון המהבהב
+  <small>בלי זה הלחיצה רק מכינה, ואת "הקלט" לוחצים בפאנל. כרום לא מאפשר להתחיל לכידה בלי לחיצה אחת שלך.</small></label>
+
+<label>מצב תמלול ברירת מחדל
+  <select id="defaultMode">
+    <option value="batch">תמלול בסיום השיחה (זול יותר, מדויק יותר)</option>
+    <option value="live">תמליל חי (סטרימינג)</option>
+  </select>
+</label>
+<label>שפת השיחה ברירת מחדל
+  <select id="language">
+    <option value="multi">עברית עם אנגלית</option>
+    <option value="he">עברית בלבד</option>
+  </select>
+</label>
+<label>מיקרופון
+  <small>הפעם הראשונה: לחץ "אפשר מיקרופון" ואשר בכרום. בלי זה ההקלטה לא מתחילה.</small>
+  <select id="micDeviceId"><option value="">ברירת המחדל של המערכת</option></select>
+</label>
+<button id="allowMic" type="button" style="background:#fff;color:#1a1a1a;border:1px solid #ccc;margin-top:8px">אפשר מיקרופון</button><span id="micStatus"></span>
+<label>מילון אישי
+  <small>מונח בכל שורה: שמות לקוחות, מוצרים, מונחים מקצועיים. נשלח לספק התמלול כ-keyterms בכל שיחה.</small>
+  <textarea id="glossary" placeholder="Bold Move&#10;Elementor&#10;BNI אדירים"></textarea>
+</label>
+
+<button id="save">שמור</button><span id="saved"></span>
+
+<div class="box">
+  <b>לאן האודיו הולך.</b> ההקלטה (המיקרופון שלך והאודיו של השיחה) נשלחת לשרת שהגדרת למעלה, משם לספק התמלול (Deepgram או AssemblyAI) ונשמרת אצלך 90 יום. אין אימון מודלים על הנתונים. אפשר למחוק כל הקלטה מעמוד השיחה.
+  <br><br><b>Zoom.</b> נתמך רק Zoom בדפדפן (Join from your browser). אפליקציית Zoom הדסקטופית לא נלכדת.
+</div>
+
+<script type="module" src="dist/options.js"></script>
+</body>
+</html>
